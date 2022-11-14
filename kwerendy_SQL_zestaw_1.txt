@@ -1,0 +1,135 @@
+//zad 1
+
+CREATE TABLE postac 
+(id_postaci INT AUTO_INCREMENT,
+nazwa VARCHAR(40),
+rodzaj ENUM('wiking','ptak','kobieta'),
+data_ur DATE,
+wiek TINYINT UNSIGNED,
+PRIMARY KEY(id_postaci));
+
+INSERT INTO postac (nazwa,rodzaj,data_ur,wiek) 
+VALUES ('Bjorn','wiking','1140-12-04','22'),('Drozd','ptak','1161-08-18','1'),('Tesciowa','kobieta','1074-05-12','80');
+
+UPDATE postac SET wiek = '88' WHERE nazwa REGEXP 'Tesciowa';
+
+//zad 2
+
+CREATE TABLE walizka 
+(id_walizki INT AUTO_INCREMENT,
+pojemnosc TINYINT UNSIGNED,
+kolor ENUM('rozowy','czerwony','teczowy','zolty'),
+id_wlasciciela INT,
+PRIMARY KEY(id_walizki),
+FOREIGN KEY(id_wlasciciela) REFERENCES postac(id_postaci) ON DELETE CASCADE);
+
+ALTER TABLE walizka ALTER COLUMN kolor SET DEFAULT 'rozowy';
+
+INSERT INTO walizka (pojemnosc,kolor,id_wlasciciela) 
+VALUES ('10','teczowy','1'),('25','zolty','3');
+
+//zad 3
+
+ALTER TABLE postac MODIFY nazwa VARCHAR(40) UNIQUE;
+
+CREATE TABLE izba 
+(adres_budynku VARCHAR(50),
+nazwa_izby VARCHAR(30),
+metraz SMALLINT UNSIGNED,
+wlasciciel VARCHAR(40) UNIQUE,
+PRIMARY KEY(adres_budynku,nazwa_izby),
+FOREIGN KEY(wlasciciel) REFERENCES postac(nazwa) ON DELETE SET NULL);
+
+ALTER TABLE izba ADD kolor_izby VARCHAR(15) DEFAULT 'czarny' AFTER metraz;
+
+INSERT INTO izba (adres_budynku,nazwa_izby,metraz,kolor_izby,wlasciciel) 
+VALUES ('Kattegat 3b','spizarnia','12','bialy','Bjorn');
+
+//zad 4
+
+CREATE TABLE przetwory 
+(id_przetworu INT AUTO_INCREMENT,
+rok_produkcji VARCHAR(4) DEFAULT '1654',
+id_wykonawcy INT,
+zawartosc VARCHAR(30),
+dodatek VARCHAR(30) DEFAULT 'papryczka chilli',
+id_konsumenta INT,
+PRIMARY KEY(id_przetworu),
+FOREIGN KEY(id_wykonawcy) REFERENCES postac(id_postaci),
+FOREIGN KEY(id_konsumenta) REFERENCES postac(id_postaci));
+
+INSERT INTO przetwory (id_wykonawcy,zawartosc,id_konsumenta) VALUES ('1','bigos','3');
+
+//zad 5
+
+INSERT INTO postac (nazwa,rodzaj,data_ur,wiek) 
+VALUES ('Floki','wiking','1116-03-30','46'),('Lagertha','wiking','1122-01-21','40'),('Ragnar','wiking','1120-06-24','42'),('Harald','wiking','1112-04-02','50'),('Torvi','wiking','1143-09-11','19');
+
+CREATE TABLE statek 
+(nazwa_statku VARCHAR(30),
+rodzaj_statku ENUM('byrding','drakkar','knara','sneka'),
+data_wodowania DATE,
+max_ladownosc INT,
+CHECK(max_ladownosc>0),
+PRIMARY KEY(nazwa_statku));
+
+INSERT INTO statek (nazwa_statku,rodzaj_statku,data_wodowania,max_ladownosc) 
+VALUES ('Odyn','drakkar','1160-07-20','500'),('Thor','drakkar','1162-08-06','230');
+
+ALTER TABLE postac ADD funkcja VARCHAR(30);
+
+UPDATE postac SET funkcja = 'kapitan' WHERE id_postaci = 1;
+
+ALTER TABLE postac ADD nazwa_statku VARCHAR(30);
+
+ALTER TABLE postac ADD FOREIGN KEY (nazwa_statku) REFERENCES statek(nazwa_statku);
+
+UPDATE postac SET nazwa_statku = 'Odyn' WHERE id_postaci = 1;
+
+UPDATE postac SET nazwa_statku = 'Thor' WHERE id_postaci = 2;
+
+UPDATE postac SET nazwa_statku = 'Odyn' WHERE id_postaci = 4;
+
+UPDATE postac SET nazwa_statku = 'Odyn' WHERE id_postaci = 5;
+
+UPDATE postac SET nazwa_statku = 'Odyn' WHERE id_postaci = 6;
+
+UPDATE postac SET nazwa_statku = 'Thor' WHERE id_postaci = 7;
+
+UPDATE postac SET nazwa_statku = 'Thor' WHERE id_postaci = 8;
+
+DELETE FROM izba WHERE nazwa_izby = 'spizarnia';
+
+DROP TABLE izba;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
