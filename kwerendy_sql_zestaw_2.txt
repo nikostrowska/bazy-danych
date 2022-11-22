@@ -1,0 +1,66 @@
+//zad 1
+
+DELETE FROM postac WHERE id_postaci = '4';
+DELETE FROM postac WHERE id_postaci = '7';
+
+ALTER TABLE walizka DROP FOREIGN KEY walizka_ibfk_1;
+ALTER TABLE przetwory DROP FOREIGN KEY przetwory_ibfk_1;
+ALTER TABLE przetwory DROP FOREIGN KEY przetwory_ibfk_2;
+ALTER TABLE postac MODIFY id_postaci INT;
+ALTER TABLE postac DROP PRIMARY KEY;
+
+//zad 2
+
+ALTER TABLE postac ADD pesel CHAR(11) NOT NULL;
+UPDATE postac SET pesel='12345678911' WHERE id_postaci='1';
+UPDATE postac SET pesel='12345678912' WHERE id_postaci='2';
+UPDATE postac SET pesel='12345678913' WHERE id_postaci='3';
+UPDATE postac SET pesel='12345678914' WHERE id_postaci='5';
+UPDATE postac SET pesel='12345678915' WHERE id_postaci='6';
+UPDATE postac SET pesel='12345678916' WHERE id_postaci='8';
+ALTER TABLE postac ADD PRIMARY KEY(pesel);
+
+ALTER TABLE postac MODIFY rodzaj ENUM('wiking','ptak','kobieta','syrena');
+INSERT INTO postac (id_postaci,nazwa,rodzaj,wiek,pesel) VALUES ('9','Gertruda Nieszczera','syrena','28','12345678917');
+
+//zad 3
+
+UPDATE postac SET nazwa_statku = 'Odyn' WHERE nazwa REGEXP 'a' AND rodzaj NOT REGEXP 'kobieta';
+
+UPDATE statek SET max_ladownosc=max_ladownosc-(0.3*max_ladownosc) WHERE data_wodowania <= '2000-01-01' AND data_wodowania >='1901-01-01';
+
+ALTER TABLE postac ADD CHECK(wiek <=1000);
+
+//zad 4
+
+ALTER TABLE postac MODIFY rodzaj ENUM('wiking','ptak','kobieta','syrena','waz');
+INSERT INTO postac (id_postaci,nazwa,rodzaj,wiek,pesel,data_ur) VALUES ('10','Loko','waz','3','12345678918','1159-12-06');
+
+CREATE TABLE marynarz SELECT*FROM postac WHERE nazwa IS NOT NULL;
+
+ALTER TABLE marynarz ADD FOREIGN KEY(nazwa_statku) REFERENCES statek(nazwa_statku) ON UPDATE CASCADE;
+
+//zad.5
+
+UPDATE postac SET nazwa_statku = NULL;
+UPDATE marynarz SET nazwa_statku = NULL;
+
+DELETE FROM postac WHERE id_postaci = '6';
+DELETE FROM marynarz WHERE id_postaci = '6';
+
+DELETE FROM statek WHERE nazwa_statku = 'Odyn' OR nazwa_statku='Thor';
+
+ALTER TABLE statek DROP CONSTRAINT statek_chk_1;
+ALTER TABLE marynarz DROP CONSTRAINT marynarz_ibfk_1;
+ALTER TABLE statek DROP PRIMARY KEY nazwa_statku;
+DROP TABLE statek;
+
+CREATE TABLE zwierz (id INT AUTO_INCREMENT,nazwa VARCHAR(15),wiek TINYINT UNSIGNED,PRIMARY KEY(id));
+INSERT INTO zwierz (nazwa,wiek)SELECT nazwa,wiek FROM postac WHERE rodzaj = 'waz' OR rodzaj = 'ptak';
+
+
+
+
+
+
+
