@@ -1,0 +1,46 @@
+//zad 1
+
+CREATE TABLE kreatura AS SELECT*FROM wikingowie.kreatura;
+CREATE TABLE zasob AS SELECT*FROM wikingowie.zasob;
+CREATE TABLE ekwipunek AS SELECT*FROM wikingowie.ekwipunek;
+
+SELECT*FROM zasob;
+
+SELECT*FROM zasob WHERE rodzaj = 'jedzenie';
+
+SELECT idZasobu,ilosc FROM ekwipunek WHERE idKreatury IN (1,3,5);
+
+//zad 2
+
+SELECT*FROM kreatura WHERE (rodzaj != 'wiedzma') AND (udzwig>50);
+
+SELECT*FROM zasob WHERE waga BETWEEN '2.00' AND '5.00';
+
+SELECT*FROM kreatura WHERE (nazwa = '%or%') AND (udzwig BETWEEN 30 AND 70);
+                             
+//zad 3
+							 
+SELECT*FROM zasob WHERE MONTH (dataPozyskania) BETWEEN 7 AND 8;
+SELECT*FROM zasob WHERE rodzaj IS NOT NULL ORDER BY waga ASC;
+mysql> SELECT*FROM kreatura ORDER BY dataUr ASC LIMIT 5;
+
+//zad 4
+
+SELECT DISTINCT rodzaj FROM zasob;
+SELECT CONCAT(nazwa," ",rodzaj)AS 'nazwa-rodzaj' FROM kreatura WHERE rodzaj LIKE 'wi%';
+SELECT*,CONCAT(ilosc*waga) AS calkowita_waga FROM zasob WHERE dataPozyskania BETWEEN '2000-01-01' AND '2007-12-31';
+
+//zad 5
+
+SELECT*, CONCAT((ilosc*waga)*0.7) AS masa_netto_jedzenia, CONCAT((ilosc*waga)*0.3) AS waga_odpadkow FROM zasob WHERE rodzaj REGEXP 'jedzenie';
+SELECT*FROM zasob WHERE rodzaj IS NULL;
+SELECT DISTINCT rodzaj FROM zasob WHERE nazwa LIKE'Ba%' AND nazwa LIKE '%os' ORDER BY rodzaj ASC;
+
+
+
+
+
+
+
+
+
